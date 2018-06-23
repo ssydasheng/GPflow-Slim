@@ -12,6 +12,41 @@ from ..transforms import positive
 from ..params import Parameter
 
 
+class NKNWrapper(object):
+    _LAYERS = dict(
+        Linear=Linear,
+        Product=Product,
+        Activation=Activation)
+
+    def __init__(self, hparams):
+        self._build_layers(hparams)
+
+    def _build_layers(self, hparams):
+        with tf.variable_scope('NKN'):
+            self._layers = [self._LAYERS[l['name']](l['params']) for l in hparams]
+
+    def forward(self, input):
+        with tf.name_scope('NKN'):
+            outputs = input # [nm, k]
+            for l in self._layers:
+                outputs = l.forward(outputs)
+        return outputs
+
+    @property
+    def parameters(self):
+        params = []
+        for l in self._layers:
+            params = params + l.parameters
+        return params
+
+    def symbolic(self):
+        ks = sp.symbols(['k'+str(i) for i in range(self._layers[0].input_dim)]) + [1.]
+        for l in self._layers:
+            ks = l.symbolic(ks)
+        assert len(ks) == 1, 'output of NKN must only have one term'
+        return ks[0]
+
+
 class _KernelLayer(object):
     def __init__(self, input_dim, name):
         self.input_dim = input_dim
@@ -122,42 +157,3 @@ class Activation(_KernelLayer):
 
     def symbolic(self, ks):
         return [self.activation_fn(k) for k in ks]
-
-
-
-_LAYERS={
-    'Linear': Linear,
-    'Product': Product,
-    'Activation': Activation
-}
-
-class NKNWrapper(object):
-    def __init__(self, hparams):
-        self._build_layers(hparams)
-
-    def _build_layers(self, hparams):
-        with tf.variable_scope('NKN'):
-            self._layers = [_LAYERS[l['name']](l['params']) for l in hparams]
-
-    def forward(self, input):
-        output_layers= []
-        with tf.name_scope('NKN'):
-            outputs = input # [nm, k]
-            for l in self._layers:
-                outputs = l.forward(outputs)
-
-        return outputs
-
-    @property
-    def parameters(self):
-        params = []
-        for l in self._layers:
-            params = params + l.parameters
-        return params
-
-    def symbolic(self):
-        ks = sp.symbols(['k'+str(i) for i in range(self._layers[0].input_dim)]) + [1.]
-        for l in self._layers:
-            ks = l.symbolic(ks)
-        assert len(ks) == 1, 'output of NKN must only have one term'
-        return ks[0]
