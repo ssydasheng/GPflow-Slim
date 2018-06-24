@@ -14,17 +14,17 @@ from ..params import Parameter
 
 class NKNWrapper(object):
 
-    _LAYERS = dict(
-        Linear=Linear,
-        Product=Product,
-        Activation=Activation)
-
     def __init__(self, hparams):
+        self._LAYERS = dict(
+            Linear=Linear,
+            Product=Product,
+            Activation=Activation)
+
         self._build_layers(hparams)
 
     def _build_layers(self, hparams):
         with tf.variable_scope('NKN'):
-            self._layers = [self._LAYERS[l['name']](l['params']) for l in hparams]
+            self._layers = [self._LAYERS[l['name']](**l['params']) for l in hparams]
 
     def forward(self, input):
         with tf.name_scope('NKN'):
@@ -32,8 +32,7 @@ class NKNWrapper(object):
             for l in self._layers:
                 outputs = l.forward(outputs)
 
-        assert len(outputs) == 1, 'cannot have multiple outputs for NKN'
-        return outputs[0]
+        return outputs
 
     @property
     def parameters(self):
@@ -108,6 +107,7 @@ class Linear(_KernelLayer):
             for j in range(self.input_dim):
                 out = out + inputs[j] * self.weights[i, j]
             outputs.append(out)
+        return outputs
 
     @property
     def parameters(self):
@@ -137,7 +137,7 @@ class Product(_KernelLayer):
     def forward(self, input):
         outputs = []
         for i in range(self.input_dim // self.step):
-            outputs.append(tf.reduce_prod(input[self.step*i: self.step*(i+1)], -1))
+            outputs.append(tf.reduce_prod(tf.stack(input[self.step*i: self.step*(i+1)]), 0))
         return outputs
 
     @property

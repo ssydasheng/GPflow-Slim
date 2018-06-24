@@ -13,17 +13,17 @@ from ..params import Parameter
 
 
 class NKNWrapper(object):
-    _LAYERS = dict(
-        Linear=Linear,
-        Product=Product,
-        Activation=Activation)
 
     def __init__(self, hparams):
+        self._LAYERS = dict(
+            Linear=Linear,
+            Product=Product,
+            Activation=Activation)
         self._build_layers(hparams)
 
     def _build_layers(self, hparams):
         with tf.variable_scope('NKN'):
-            self._layers = [self._LAYERS[l['name']](l['params']) for l in hparams]
+            self._layers = [self._LAYERS[l['name']](**l['params']) for l in hparams]
 
     def forward(self, input):
         with tf.name_scope('NKN'):

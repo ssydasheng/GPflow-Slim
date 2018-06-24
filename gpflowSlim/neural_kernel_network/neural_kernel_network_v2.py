@@ -11,7 +11,9 @@ class NeuralKernelNetwork(Kernel):
 
         self._primitive_kernels = primitive_kernels
         self._nknWrapper = nknWrapper
-        self._parameters = self._parameters + self._primitive_kernels.parameters + self._nknWrapper.parameters
+        self._parameters = self._parameters + self._nknWrapper.parameters
+        for kern in self._primitive_kernels:
+            self._parameters = self._parameters + kern.parameters
 
     def Kdiag(self, X, presliced=False):
         primitive_values = [kern.Kdiag(X, presliced) for kern in self._primitive_kernels]

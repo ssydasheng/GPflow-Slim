@@ -1,3 +1,3 @@
 # from .neural_kernel_network import NeuralKernelNetwork
-from .neural_kernel_network_v2 import NeuralKernelNetwork
-from .neural_kernel_network_wrapper_v2 import NKNWrapper
+from .neural_kernel_network import NeuralKernelNetwork
+from .neural_kernel_network_wrapper import NKNWrapper
