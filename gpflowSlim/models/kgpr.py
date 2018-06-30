@@ -83,8 +83,8 @@ class KGPR(Model):
         """
         K1 = self.kern1.K(self.X1)
         K2 = self.kern2.K(self.X2)
-        K1u = self.kern1.cov(self.X1, Xnew1)
-        K2u = self.kern2.cov(self.X2, Xnew2)
+        K1u = self.kern1.K(self.X1, Xnew1)
+        K2u = self.kern2.K(self.X2, Xnew2)
         m = tf.shape(K1)[0]
         n = tf.shape(K2)[0]
 
