@@ -63,5 +63,5 @@ as well as
 }
 ```
 
-## Ackonwledgement
+## Acknowledgement
 GPflow-Slim is adapted from [GPflow](https://github.com/GPflow/GPflow).
