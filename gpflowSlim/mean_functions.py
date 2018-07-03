@@ -1,3 +1,4 @@
+# Copyright 2018 Shengyang Sun
 # Copyright 2016 James Hensman, alexggmatthews, PabloLeon, Valentine Svensson
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

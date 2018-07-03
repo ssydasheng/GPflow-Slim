@@ -1,3 +1,4 @@
+# Copyright 2018 Shengyang Sun
 # Copyright 2016 James Hensman, Valentine Svensson, alexggmatthews
 # Copyright 2017 Artem Artemev @awav
 #

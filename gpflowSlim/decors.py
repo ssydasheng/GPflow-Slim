@@ -1,3 +1,4 @@
+# Copyright 2016 Shengyang Sun
 # Copyright 2017 Artem Artemev @awav
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

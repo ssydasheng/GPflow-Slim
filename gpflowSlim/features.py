@@ -1,3 +1,4 @@
+# Copyright 2018 Shengyang Sun
 # Copyright 2017 st--, Mark van der Wilk
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

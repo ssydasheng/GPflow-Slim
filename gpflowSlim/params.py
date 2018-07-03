@@ -1,3 +1,4 @@
+# Copyright 2018 Shengyang Sun
 # Copyright 2016 James Hensman, Mark van der Wilk,
 #                Valentine Svensson, alexggmatthews,
 #                PabloLeon, fujiisoup
