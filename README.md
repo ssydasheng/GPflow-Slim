@@ -1,6 +1,6 @@
 # GPflow-Slim
 GPflow-Slim is a package for building Gaussian process models in python, using TensorFlow. It is adapted from 
-[GPflow](git@github.com:GPflow/GPflow.git) and now contributed by [Shengyang Sun](https://github.com/ssydasheng/Neural-Kernel-Network/) 
+[GPflow](https://github.com/GPflow/GPflow) and now contributed by [Shengyang Sun](https://github.com/ssydasheng/Neural-Kernel-Network/) 
 and [Guodong Zhang](https://github.com/gd-zhang).
 
 Compared to GPflow, GPflow-Slim enables simpler Tensorflow-style programming. User can define variables arbitrarily
