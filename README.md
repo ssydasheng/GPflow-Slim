@@ -33,7 +33,7 @@ with tf.Session() as sess:
     sess.run(infer) 
 ```
 For more examples, please refer [examples](./examples) as well as 
-[Neural Kernel Network](git@github.com:ssydasheng/Neural-Kernel-Network.git).
+[Neural Kernel Network](https://github.com/ssydasheng/Neural-Kernel-Network).
 
 
 ## Citation
@@ -64,4 +64,4 @@ as well as
 ```
 
 ## Ackonwledgement
-GPflow-Slim is adapted from [GPflow](git@github.com:GPflow/GPflow.git).
+GPflow-Slim is adapted from [GPflow](https://github.com/GPflow/GPflow).
