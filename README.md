@@ -7,11 +7,7 @@ Compared to GPflow, GPflow-Slim enables simpler Tensorflow-style programming. Us
 anywhere in the program and apply standard Tensorflow optimizer to optimize the objective.
 
 ## Install
-After cloning the package, you can install GPflow-Slim by
-```
-python setup.py install
-```
-For modifying the source code of GPflow-Slim, it's better to run 
+For installing, please run
 ```
 python setup.py develop
 ```
