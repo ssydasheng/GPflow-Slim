@@ -39,5 +39,3 @@ from . import base
 from .params import Parameter as Param
 from . import kernel_kitchen_sink
 from . import mean_functions
-from . import kronecker
-from .interpolation_np import GridInteprolation
