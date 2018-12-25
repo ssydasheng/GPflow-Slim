@@ -121,7 +121,7 @@ class Linear(_KernelLayer):
     def symbolic(self, ks):
         out = []
         for i in range(self.output_dim):
-            tmp = self.bias.numpy()[0]
+            tmp = self.bias.numpy()[i]
             w = self.weights.numpy()
             for j in range(self.input_dim):
                 tmp = tmp + ks[j] * w[i, j]
