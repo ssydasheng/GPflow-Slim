@@ -26,6 +26,7 @@ class _SettingsManager(object):
     def __init__(self, cur_settings):
         self._cur_settings = cur_settings
         self._settings_stack = []
+        self._jitter = self.numerics.jitter_level
 
     def __getattr__(self, name):
         try:
@@ -48,9 +49,12 @@ class _SettingsManager(object):
     def get_settings(self):
         return copy.deepcopy(self._cur_settings)
 
+    def set_jitter(self, jitter):
+        self._jitter = jitter
+
     @property
     def jitter(self):
-        return self.numerics.jitter_level
+        return self._jitter
 
     @property
     def tf_float(self):

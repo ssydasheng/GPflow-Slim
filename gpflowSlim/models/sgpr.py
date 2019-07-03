@@ -102,7 +102,7 @@ class SGPR(GPModel, SGPRUpperMixin):
 
     """
 
-    def __init__(self, X, Y, kern, feat=None, mean_function=None, Z=None, obs_var=0.1, **kwargs):
+    def __init__(self, X, Y, kern, feat=None, mean_function=None, Z=None, obs_var=0.1, num_data=None, num_latent=None, **kwargs):
         """
         X is a data matrix, size N x D
         Y is a data matrix, size N x R
@@ -114,8 +114,8 @@ class SGPR(GPModel, SGPRUpperMixin):
         likelihood = likelihoods.Gaussian(var=obs_var)
         GPModel.__init__(self, X, Y, kern, likelihood, mean_function, **kwargs)
         self.feature = features.inducingpoint_wrapper(feat, Z)
-        self.num_data = X.shape[0]
-        self.num_latent = Y.shape[1]
+        self.num_data = X.shape[0] if num_data is None else num_data
+        self.num_latent = Y.shape[1] if num_latent is None else num_latent
 
     def _build_likelihood(self):
         """
@@ -189,7 +189,7 @@ class SGPR(GPModel, SGPRUpperMixin):
 
 
 class GPRFITC(GPModel, SGPRUpperMixin):
-    def __init__(self, X, Y, kern, feat=None, mean_function=None, Z=None, obs_var=0.1, **kwargs):
+    def __init__(self, X, Y, kern, feat=None, mean_function=None, Z=None, obs_var=0.1, num_data=None, num_latent=None, **kwargs):
         """
         This implements GP regression with the FITC approximation.
         The key reference is
@@ -220,8 +220,8 @@ class GPRFITC(GPModel, SGPRUpperMixin):
         likelihood = likelihoods.Gaussian(var=obs_var)
         GPModel.__init__(self, X, Y, kern, likelihood, mean_function, **kwargs)
         self.feature = features.inducingpoint_wrapper(feat, Z)
-        self.num_data = X.shape[0]
-        self.num_latent = Y.shape[1]
+        self.num_data = X.shape[0] if num_data is None else num_data
+        self.num_latent = Y.shape[1] if num_latent is None else num_latent
 
     def _build_common_terms(self):
         num_inducing = len(self.feature)
@@ -306,11 +306,11 @@ class GPRFITC(GPModel, SGPRUpperMixin):
         if full_cov:
             var = self.kern.K(Xnew) - tf.matmul(w, w, transpose_a=True) \
                   + tf.matmul(intermediateA, intermediateA, transpose_a=True)
-            var = tf.tile(tf.expand_dims(var, 2), tf.stack([1, 1, tf.shape(self.Y)[1]]))
+            var = tf.tile(tf.expand_dims(var, 2), tf.stack([1, 1, self.num_latent]))
         else:
             var = self.kern.Kdiag(Xnew) - tf.reduce_sum(tf.square(w), 0) \
                   + tf.reduce_sum(tf.square(intermediateA), 0)  # size Xnew,
-            var = tf.tile(tf.expand_dims(var, 1), tf.stack([1, tf.shape(self.Y)[1]]))
+            var = tf.tile(tf.expand_dims(var, 1), tf.stack([1, self.num_latent]))
 
         return mean, var
 

@@ -940,6 +940,36 @@ class RBFComplex(Stationary):
         return tf.complex(real, imag)
 
 
+class TPS(Stationary):
+
+    def square_dist(self, X, X2):
+        Xs = tf.reduce_sum(tf.square(X), axis=1)
+
+        if X2 is None:
+            dist = -2 * tf.matmul(X, X, transpose_b=True)
+            dist += tf.reshape(Xs, (-1, 1))  + tf.reshape(Xs, (1, -1))
+            return tf.clip_by_value(dist, 0., np.inf)
+
+        X2s = tf.reduce_sum(tf.square(X2), axis=1)
+        dist = -2 * tf.matmul(X, X2, transpose_b=True)
+        dist += tf.reshape(Xs, (-1, 1)) + tf.reshape(X2s, (1, -1))
+        return tf.clip_by_value(dist, 0., np.inf)
+
+    @property
+    def R(self):
+        return tf.constant(2., dtype=settings.float_type)
+
+    def K(self, X, X2=None, presliced=False):
+        if not presliced:
+            X, X2 = self._slice(X, X2)
+        D = tf.sqrt(self.square_dist(X, X2))
+        kern = self.variance * (tf.pow(D, 3.) - 1.5*self.R*tf.square(D) + 0.5*tf.pow(self.R, 3.))
+        return kern
+
+    def Kdiag(self, X, presliced=False):
+        return self.variance * 0.5*tf.pow(self.R, 3.) * tf.ones([tf.shape(X)[0]], dtype=settings.float_type)
+
+
 def make_kernel_names(kern_list):
     """
     Take a list of kernels and return a list of strings, giving each kernel a
