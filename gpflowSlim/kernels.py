@@ -369,7 +369,7 @@ class Stationary(Kernel):
     """
 
     def __init__(self, input_dim, variance=1.0, lengthscales=None,
-                 active_dims=None, ARD=False, name='kernel'):
+                 active_dims=None, ARD=False, min_ls=1e-6, name='kernel'):
         """
         - input_dim is the dimension of the input to the kernel
         - variance is the (initial) value for the variance parameter
@@ -393,7 +393,7 @@ class Stationary(Kernel):
             else:
                 lengthscales = 1.0 if lengthscales is None else lengthscales
             self.ARD = ARD
-            self._ls = Parameter(lengthscales, transform=transforms.positive, name='ls')
+            self._ls = Parameter(lengthscales, transform=transforms.Log1pe(min_ls), name='ls')
 
         self._parameters = self._parameters + [self._variance, self._ls]
 
