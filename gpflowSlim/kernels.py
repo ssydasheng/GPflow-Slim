@@ -451,11 +451,11 @@ class RatQuad(Stationary):
        k(x, x') = \left(1 + \frac{(x - x')^2}{2\alpha\ell^2} \right)^{-\alpha}
     """
     def __init__(self, input_dim, alpha=1., variance=1.0, lengthscales=None,
-                 active_dims=None, ARD=False, name='kernel'):
+                 active_dims=None, ARD=False, min_ls=1e-6, name='kernel'):
         with tf.variable_scope(name):
             super(RatQuad, self).__init__(
                 input_dim=input_dim, variance=variance,
-                lengthscales=lengthscales, active_dims=active_dims, ARD=ARD, name=name)
+                lengthscales=lengthscales, active_dims=active_dims, ARD=ARD, min_ls=min_ls, name=name)
             self._alpha = Parameter(alpha, transform=transforms.positive, name='alpha')
 
         self._parameters = self._parameters + [self._alpha]
@@ -619,9 +619,9 @@ class Cosine(Stationary):
     The Cosine kernel
     """
     def __init__(self, input_dim, variance=1.0, lengthscales=None,
-                 active_dims=None, ARD=False, name='kernel'):
+                 active_dims=None, ARD=False, min_ls=1e-6, name='kernel'):
         super(Cosine, self).__init__(input_dim, variance=variance, lengthscales=lengthscales,
-                 active_dims=active_dims, ARD=ARD, name=name)
+                 active_dims=active_dims, ARD=ARD, min_ls=min_ls, name=name)
         with tf.variable_scope(name):
             self._weights = Parameter(np.random.normal(size=[input_dim, 1]), name='weights')
         self._parameters = self._parameters + [self._weights]
@@ -886,9 +886,9 @@ class CosineComplex(Stationary):
     The Cosine kernel
     """
     def __init__(self, input_dim, variance=1.0, lengthscales=None,
-                 active_dims=None, ARD=False, name='CosineComplex'):
+                 active_dims=None, ARD=False, min_ls=1e-6, name='CosineComplex'):
         super(CosineComplex, self).__init__(input_dim, variance=variance, lengthscales=lengthscales,
-                 active_dims=active_dims, ARD=ARD, name=name)
+                 active_dims=active_dims, ARD=ARD, min_ls=min_ls, name=name)
         with tf.variable_scope(name):
             self._weights = Parameter(np.random.normal(size=[input_dim, 1]), name='weights')
         self._parameters = self._parameters + [self._weights]
