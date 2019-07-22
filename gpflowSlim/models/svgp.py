@@ -71,13 +71,13 @@ class SVGP(GPModel):
         GPModel.__init__(self, X, Y, kern, likelihood, mean_function, **kwargs)
         self.num_data = num_data or X.shape[0]
         self.q_diag, self.whiten = q_diag, whiten
-        self.feature = features.inducingpoint_wrapper(feat, Z)
-        self.num_latent = num_latent or Y.shape[1]
-
-        # init variational parameters
-        num_inducing = len(self.feature)
-
         with tf.variable_scope(self.name):
+            self.feature = features.inducingpoint_wrapper(feat, Z)
+            self.num_latent = num_latent or Y.shape[1]
+
+            # init variational parameters
+            num_inducing = len(self.feature)
+
             self._q_mu = Parameter(np.zeros((num_inducing, self.num_latent), dtype=settings.float_type), name='q_mu')
             if self.q_diag:
                 self._q_sqrt = Parameter(np.ones((num_inducing, self.num_latent), dtype=settings.float_type),

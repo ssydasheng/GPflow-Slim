@@ -113,7 +113,8 @@ class SGPR(GPModel, SGPRUpperMixin):
         """
         likelihood = likelihoods.Gaussian(var=obs_var)
         GPModel.__init__(self, X, Y, kern, likelihood, mean_function, **kwargs)
-        self.feature = features.inducingpoint_wrapper(feat, Z)
+        with tf.variable_scope(self.name):
+            self.feature = features.inducingpoint_wrapper(feat, Z)
         self.num_data = X.shape[0] if num_data is None else num_data
         self.num_latent = Y.shape[1] if num_latent is None else num_latent
 
@@ -217,9 +218,11 @@ class GPRFITC(GPModel, SGPRUpperMixin):
 
         mean_function = Zero() if mean_function is None else mean_function
 
-        likelihood = likelihoods.Gaussian(var=obs_var)
+        with tf.variable_scope(self.name):
+            likelihood = likelihoods.Gaussian(var=obs_var)
         GPModel.__init__(self, X, Y, kern, likelihood, mean_function, **kwargs)
-        self.feature = features.inducingpoint_wrapper(feat, Z)
+        with tf.variable_scope(self.name):
+            self.feature = features.inducingpoint_wrapper(feat, Z)
         self.num_data = X.shape[0] if num_data is None else num_data
         self.num_latent = Y.shape[1] if num_latent is None else num_latent
 
