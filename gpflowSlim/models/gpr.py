@@ -38,7 +38,7 @@ class GPR(GPModel):
 
        \\log p(\\mathbf y \\,|\\, \\mathbf f) = \\mathcal N\\left(\\mathbf y\,|\, 0, \\mathbf K + \\sigma_n \\mathbf I\\right)
     """
-    def __init__(self, X, Y, kern, mean_function=None, obs_var=0.1, num_latent=None, **kwargs):
+    def __init__(self, X, Y, kern, mean_function=None, obs_var=0.1, num_latent=None, min_var=None, **kwargs):
         """
         X is a data matrix, size N x D
         Y is a data matrix, size N x R
@@ -46,9 +46,9 @@ class GPR(GPModel):
         """
         if 'name' in kwargs:
             with tf.variable_scope(kwargs['name']):
-                likelihood = likelihoods.Gaussian(var=obs_var)
+                likelihood = likelihoods.Gaussian(var=obs_var, min_var=min_var)
         else:
-            likelihood = likelihoods.Gaussian(var=obs_var)
+            likelihood = likelihoods.Gaussian(var=obs_var, min_var=min_var)
         GPModel.__init__(self, X, Y, kern, likelihood, mean_function, **kwargs)
         self.num_latent = Y.shape[1] if num_latent is None else num_latent
 

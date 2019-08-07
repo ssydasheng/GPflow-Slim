@@ -156,11 +156,12 @@ class Likelihood(object):
 
 
 class Gaussian(Likelihood):
-    def __init__(self, var=1.0):
+    def __init__(self, var=1.0, min_var=None):
         super().__init__()
         with tf.variable_scope(self.name):
+            trans = transforms.positive if min_var is None else transforms.Log1pe(min_var)
             self._variance = Parameter(
-                var, transform=transforms.positive, dtype=settings.float_type, name='variance')
+                var, transform=trans, dtype=settings.float_type, name='variance')
         self._parameters = self._parameters + [self._variance]
 
     @property
